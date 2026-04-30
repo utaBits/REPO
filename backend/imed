@@ -1,0 +1,129 @@
+import express from 'express'
+import pg from 'pg'
+import path from 'path'
+import { fileURLToPath } from 'url'
+import jwt from 'jsonwebtoken'
+import { error } from 'console'
+import bcrypt, { hash } from "bcrypt"
+import dotenv from "dotenv"
+dotenv.config()
+
+const app = express()
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+app.get("/" , (req,res) => {
+    res.redirect("/login")
+})
+
+app.use(express.static(path.join(__dirname , '..' ,'frontend')))
+app.use(express.json())
+const pool = new pg.Pool({
+    user: 'postgres',
+    host: 'localhost',
+    database: 'Inventory',
+    port: 5432,
+    password: process.env.DB_PASSWORD
+})
+export { pool };
+app.get("/login" , (req , res) => {
+    res.sendFile(path.join(__dirname , '..' , 'frontend' , 'login.html'))
+    
+})
+app.post("/login" , async (req , res) =>{
+    const { username , password } = req.body
+    console.log(username)
+
+    const result = await validate(username , password , res)
+    res.status(result.status).json({succsess: result.succsess ,  message: result.message})
+})
+app.get("/dashboard" , (req,res) => {
+    res.sendFile(path.join(__dirname , '..' ,'frontend', 'index.html'))
+})
+
+app.post("/addoperation", async (req,res) => {
+
+
+    const { productName , startDate, operationStatus, operationType, quantity, endDate, additionalInfo} = req.body;
+        const productId = await defineProductId(productName);
+        console.log(productId + " is the product id");
+     const result =  pool.query("INSERT INTO Operations (product_id , start_date , operation_status , operation_type , quantity , end_date , additional_info) VALUES ($1 , $2 , $3 , $4 , $5 , $6 , $7) RETURNING *", [productId, startDate, operationStatus, operationType, quantity, endDate, additionalInfo]);
+     result.then((result) => {console.log(result.rows[0])})
+
+    console.log(productName + " is the product name");
+
+    res.status(200).json({message: "operation added successfully"})
+
+    
+})
+
+app.get("/operations", async (req,res) => {
+    const operations = await addOperationInDom();
+    res.status(200).json(operations);
+})
+
+app.get("/filter/:filterName", async (req,res) => {
+    const filterName = req.params.filterName;
+    if(filterName === "productname"){
+        const filterResult = await pool.query(`SELECT DISTINCT ${filterName} FROM Operations JOIN Products ON Operations.product_id = Products.id`)
+        res.status(200).json(filterResult.rows)
+    }else{
+        const filterResult = await pool.query(`SELECT DISTINCT ${filterName}::text FROM Operations`);
+        res.status(200).json(filterResult.rows);
+    }
+})
+
+app.get("/filterbyadaptive", async (req,res) => {
+    const map = {
+        productname: "products.productname",
+        operation_type: "operations.operation_type",
+        start_date: "operations.start_date",
+        operation_status: "operations.operation_status",
+        quantity: "operations.quantity"
+    }
+    const fiters = Object.keys(req.query);
+    const values = Object.values(req.query);
+    
+    const filterResult = await pool.query(`SELECT products.productname , operations.operation_type , operations.start_date , operations.operation_status , operations.quantity FROM Operations JOIN Products ON Operations.product_id = Products.id WHERE ${fiters.map((filter, index) => `${map[filter]} = $${index + 1}`).join(" AND ")}`, values);
+    res.status(200).json(filterResult.rows);
+    console.log(req.query , " is the query");
+})
+app.get("/products" , async (req,res) =>{
+    const productNames = await pool.query('SELECT productname FROM Products')
+    res.status(200).json(productNames.rows)
+})
+
+app.listen(process.env.PORT , "0.0.0.0", () => {
+    console.log(`listening on port: ${process.env.PORT}`)
+})
+
+
+async function defineProductId(productName) {
+    const id = pool.query("SELECT id FROM Products WHERE productname = $1", [productName]);
+    const product_Id = id.then((result) => {return result.rows[0].id});
+     
+    return await product_Id;
+}
+
+async function addOperationInDom(){
+    let operationList = await pool.query("SELECT products.productname , operations.operation_type , operations.start_date , operations.operation_status , operations.quantity FROM Operations JOIN Products ON Operations.product_id = Products.id ORDER BY operation_id DESC");
+    return operationList.rows;
+}
+async function validate(username , password , res){
+    console.log(username)
+   const response = await pool.query("SELECT * FROM users WHERE username = $1",[username])
+   console.log(response.rows)
+   if(!response.rows.length){
+    return { succsess: false, status: 404 , message: "user not found"}
+   }
+    const user = response.rows[0]
+    const isMatch = await bcrypt.compare(password , user.password)
+    if(!isMatch){
+        return  { succsess: false, status: 400 , message: "Invalid credentials"}
+    }
+
+    return  { succsess: true, status: 200 , message: "valid User" , user}
+
+
+}
+
