@@ -360,6 +360,11 @@ form button {
     aside{
         display: none !important;
     }
+    .sideBarBtn{
+    position: absolute;
+    padding: 10px;
+    margin-right: 15px;
+}
     .maincontent{
         flex-direction: column;
     }
@@ -376,4 +381,14 @@ form button {
     right: 30px;
     top: 30px;
     padding: 5px;
+}
+#reset{
+    padding: 7px 15px 7px 15px;
+    background-color: var(--card);
+    color: var(--text);
+    border: 1px solid var(--border);
+
+}
+#reset:hover{
+    background-color: var(--bg)
 }

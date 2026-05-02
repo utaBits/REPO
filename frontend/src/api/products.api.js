@@ -1,5 +1,5 @@
 export async function fulloffProducts(select){
-        select.innerHTML = ""
+    select.innerHTML = ""
     try{
     const resp = await fetch("/products")
     if(!resp.ok){

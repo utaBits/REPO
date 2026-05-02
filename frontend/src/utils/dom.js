@@ -68,3 +68,9 @@ export function validate(username , password){
 }
 export const changeUrl = (location) =>{window.location.href = location}
 export const dashboardUrl = () =>{window.location.href = "http://localhost:3000/dashboard"}
+export const sideBarBtn = () =>{
+        const sideBarBtn = document.createElement("span")
+        sideBarBtn.classList.add(".sideBarBtn")
+        document.querySelector(".maincontent").appendChild(sideBarBtn)
+    
+}

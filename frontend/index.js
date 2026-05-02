@@ -3,9 +3,10 @@ import { fulloffProducts } from "./src/api/products.api.js"
 import { emptyFieldAction , emptyFieldActionEnd } from "./src/utils/dom.js"
 import { toCreateFilterContent , filterByAdaptiveFilters } from "./src/api/filters.api.js"
 import { adaptiveFilters } from "./controllers/filterscontrollers.js"
-import { prettyDOM } from "./src/utils/dom.js"
+import { prettyDOM , sideBarBtn } from "./src/utils/dom.js"
 import { addOperation } from "./src/api/operations.api.js"
 updateOperations();
+
 const modal = document.querySelector(".modal");
 const modalcontent = document.querySelector(".modalcontent");
 const addProdcutbtn = document.querySelector("#addproduct")
@@ -13,10 +14,8 @@ console.log(modal)
 addProdcutbtn.addEventListener("click", () => {
         modal.classList.add("active");
         const selectProducts = modal.querySelector("#productName")
-        selectProducts.addEventListener("pointerdown" ,() => {
-          fulloffProducts(selectProducts)
-             
-        })
+        fulloffProducts(selectProducts)
+
     document.querySelector("#closeBtn").addEventListener("click" , () =>{
         modal.classList.remove("active");
     })
@@ -86,4 +85,16 @@ if(e.target.matches(".menuitem")){
     document.querySelector(".orders").innerHTML = ""
     history.pushState({} , "" , `${e.target.textContent}`)
 }
+})
+
+const resetBtn = document.querySelector("#reset")
+resetBtn.addEventListener("click" , () =>{
+    location.reload()
+})
+
+
+const mobileMedia = window.matchMedia('(max-width: 600px)')
+mobileMedia.addEventListener("change" , () =>{
+    console.log("xdeba ragac")
+    sideBarBtn()
 })

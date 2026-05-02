@@ -14,6 +14,7 @@ export function addOperation(operation){
 }
 export function updateOperations(){
     const tbody = document.querySelector("tbody");
+    tbody.innerHTML = ""
     fetch("operations",{
         method: "GET",
         headers: {
