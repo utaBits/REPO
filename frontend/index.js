@@ -3,7 +3,7 @@ import { fulloffProducts } from "./src/api/products.api.js"
 import { emptyFieldAction , emptyFieldActionEnd } from "./src/utils/dom.js"
 import { toCreateFilterContent , filterByAdaptiveFilters } from "./src/api/filters.api.js"
 import { adaptiveFilters } from "./controllers/filterscontrollers.js"
-import { prettyDOM , sideBarBtn } from "./src/utils/dom.js"
+import { prettyDOM } from "./src/utils/dom.js"
 import { addOperation } from "./src/api/operations.api.js"
 updateOperations();
 
@@ -92,9 +92,10 @@ resetBtn.addEventListener("click" , () =>{
     location.reload()
 })
 
-
+/*
 const mobileMedia = window.matchMedia('(max-width: 600px)')
 mobileMedia.addEventListener("change" , () =>{
     console.log("xdeba ragac")
     sideBarBtn()
 })
+    */
