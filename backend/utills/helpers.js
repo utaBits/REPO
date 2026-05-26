@@ -9,7 +9,7 @@ export async function defineProductId(productName) {
 
 
 export async function addOperationInDom(){
-    let operationList = await pool.query("SELECT products.productname , operations.operation_type , operations.start_date , operations.operation_status , operations.quantity FROM Operations JOIN Products ON Operations.product_id = Products.id ORDER BY operation_id DESC");
+    let operationList = await pool.query("SELECT operations.operation_id, products.productname , operations.operation_type , operations.start_date , operations.operation_status , operations.quantity FROM Operations JOIN Products ON Operations.product_id = Products.id ORDER BY operation_id DESC");
     return operationList.rows;
 }
 

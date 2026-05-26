@@ -26,6 +26,8 @@ export async function sendMail(userGmail) {
 
     const randomNumber = Math.floor(100000 + Math.random() * 900000)
 
+    await pool.query("UPDATE users SET otp = $1 WHERE gmail = $2",[randomNumber , userGmail])
+
     try{
     const info = await transporter.sendMail({
         from: process.env.GMAIL,
@@ -33,7 +35,6 @@ export async function sendMail(userGmail) {
         subject: "Verfication CODE:",
         html: `<b>${randomNumber}</b>`
     })
-    pool.query("UPDATE users SET otp = $1 WHERE gmail = $2",[randomNumber , userGmail])
       console.log("Message sent: %s", info.messageId);
   // Preview URL is only available when using an Ethereal test account
 }catch(err){

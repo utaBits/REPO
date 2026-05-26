@@ -27,7 +27,7 @@ export const login = async (req ,res) =>{
         const userGmail = user.gmail
 
         console.log(userGmail)
-          sendMail(userGmail)
+          await sendMail(userGmail)
 
     const token = jwt.sign(
         {
@@ -45,7 +45,7 @@ export const login = async (req ,res) =>{
     
 
     console.log(token)
-    res.status(200).json({ success: true , message: "Login success", token })
+    res.status(200).json({ success: true , message: "Login success", token , username: user.username })
 }catch(err){console.error(err)}
 
 }
@@ -53,10 +53,15 @@ export const login = async (req ,res) =>{
 export const otpValidate = async (req , res) =>{
     const { userOtp } = req.body
     console.log(userOtp)
-    const token = req.headers.authorization
+
+    const token = req.cookies.token
+
     const username = req.headers.username
+    console.log(username , "from otp validate")
     const response = await pool.query("SELECT otp FROM users WHERE username = $1",[username])
+    console.log(response , "DBBBBB") ;
     const otp = response.rows[0].otp
+    console.log(otp , 'otp from db')
     if(userOtp !== otp){
         return res.status(401).json({success: false , message: "wrong OTP" })
     }
