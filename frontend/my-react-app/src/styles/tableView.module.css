@@ -1,0 +1,82 @@
+.tableComponent{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: #F0EDE9;
+}
+.tableComponent > h1{
+    margin: 0;
+    height: 50px;
+    width: 100%;
+    background-color: #FFFFFF;
+}
+.tableMainContent{
+    margin-top: 40px;
+    width: 96%;
+    height: 70%;
+    border-radius: 16px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 50px;
+
+}
+.tableMainContent>:first-child{
+    width: 100%;
+    height: 150px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+}
+.tableComponent .tableCard1 , .tableComponent .tableCard2{
+    width: 49%;
+    height: 100%;
+    background-color: #FFFFFF;
+    border-radius: 16px;
+}
+.tableMainContent>*{
+    border-radius: 16px;
+}
+.tableInventory{
+    position: relative;
+    background-color: #FFFFFF;
+
+    height: 90%;
+    width: 100%;
+    overflow: hidden;
+    overflow-y: scroll;
+        scrollbar-width: none;
+        scroll-behavior: smooth;
+
+}
+.tableInventory table{
+    border-collapse: separate;
+    width: 100%;
+    padding: 5px 0 0 5px;
+    text-align: center;
+    border-spacing: 0 15px;
+}
+.tableInventory thead{
+    color: #AAAAAA;
+    background-color: #fafafa;
+    font-size: clamp(0.3rem , 2vw , 0.8rem);
+    border-bottom: 1px solid #F0F0F0;
+}
+.tableInventory td > span{
+    font-size: clamp(0.3rem , 2vw , 0.8rem);
+    font-weight: bold;
+    width: 100%;
+    padding: 5px;
+    border-radius: 6px;
+}
+.tableInventory>span{
+    font-weight: bold;
+    font-size: medium;
+    padding: 0 0 0 7px;
+}

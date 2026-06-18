@@ -9,6 +9,8 @@ import cookieParser from 'cookie-parser'
 import { fileURLToPath } from "url"
 import  cors  from 'cors'
 import datesRoutes from './routes/dates.routes.js'
+import stockRoutes from './routes/stock.routes.js'
+import locallyRoutes from './routes/locally.routes.js'
 
 
 const root = path.resolve("..")
@@ -44,6 +46,8 @@ app.use("/filterbyadaptive", filterNameRouter)
 app.use("/operationadd" , oprouter)
 app.use("/products", productsRouter)
 app.use("/dates", datesRoutes)
+app.use("/stock" , stockRoutes)
+app.use("/locally" , locallyRoutes)
 app.use("/" , pagesRoutes)
 
 

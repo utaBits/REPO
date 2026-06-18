@@ -1,5 +1,5 @@
 import { href  , Link, BrowserRouter  , Routes , Router, Route , useLocation} from "react-router-dom";
-import './styles/dashboard.css' ;
+import style from './styles/dashboard.module.css' ;
 import  officeComponent from './routes/office.jsx' ;
 import stockComponent from './routes/stock.jsx' ;
 import productsComponent from './routes/products.jsx' ;
@@ -32,28 +32,27 @@ function Dashboard() {
 
     ]
     const location = useLocation() ;
-    console.log(location , 'location from dashboard.jsx') ;
     const username = localStorage.getItem('username');
   return (
-    <div className="dashboard">
-        <aside className="asideNav">
-            <div className="navHeader">
-                <div className="logo"></div>
-                <div className="companyName">Inventory</div>             
+    <div className={style.dashboard}>
+        <aside className={style.asideNav}>
+            <div className={style.navHeader}>
+                <div className={style.logo}></div>
+                <div className={style.companyName}>Inventory</div>             
             </div>
-            <nav className="navLinks">
+            <nav className={style.navLinks}>
                 {navLinks.map((link , index ) =>(
-                    <Link key={index} to={link.href} className={`navLink ${location.pathname === link.href? 'active': ''}`}>{link.label}</Link>
+                    <Link key={index} to={link.href} className={style.navLink + ' ' + (location.pathname === link.href ? style.active : '')}>{link.label}</Link>
                 ))}
             </nav>
-            <div className="navFooter">
-                <div className="profile">
-                    <div className="avatar"></div>
-                    <span className="username">{username}</span>
+            <div className={style.navFooter}>
+                <div className={style.profile}>
+                    <div className={style.avatar}></div>
+                    <span className={style.username}>{username}</span>
                 </div>
             </div>
         </aside>
-        <main>
+        <main className={style.main}>
             <Routes>
                 {navLinks.map((link , index ) =>{
                     const Component = link.Component ;

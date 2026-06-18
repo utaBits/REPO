@@ -1,7 +1,7 @@
 import react , { useState } from 'react' ;
 import { useNavigate } from 'react-router-dom' ;
-import './styles/login.css' ;
 import { fetchAuth , VerifyOTP } from './api/login.auth.jsx' ;
+import styles from './styles/login.module.css' ;
 
 function Login(){
     const [username, setUsername] = useState('') ;
@@ -36,9 +36,9 @@ function Login(){
 
     
     return(
-        <div className='login-container'>
+        <div className={styles.loginContainer}>
             <h2>Login</h2>
-            <form className="login-form" onSubmit={handleSubmit}>
+            <form className={styles.loginForm} onSubmit={handleSubmit}>
                 <div>
                     <label htmlFor="username">Username:</label>
                     <input

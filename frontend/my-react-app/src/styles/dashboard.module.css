@@ -1,0 +1,140 @@
+body{
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.dashboard{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    height: 100vh;
+    background-color: #f0f0f0;
+    width: 100vw;
+}
+.asideNav{
+    height: 100%;
+    width: 15%;
+    background-color: #0C1117;
+
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: baseline;
+
+}
+.navHeader{
+    color: white;
+    font-size: clamp(1.5rem, 2vw, 2.5rem);
+    font-weight: bold;
+    margin: 20px 0;
+
+    width: 90%;
+    height: 7%;
+
+    position: relative;
+
+}
+.navHeader::after , .navLinks::after {
+    position: absolute;
+    content: "";
+    display: block;
+    width: 100%;
+    height: 0.5px;
+    background-color: white;
+    bottom: 0;
+    left: 0;
+}
+.navLinks{
+    width: 90%;
+    height: 85%;
+
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+
+}
+.navLink{
+        text-decoration: none;
+        color: #373E45;
+        margin: 10px 0;
+        font-size: clamp(0.6rem, 2vw, 1.5rem);
+        font-weight: 500;
+        width: 90%;
+        height: 5%;
+
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+}
+.navLink:hover{
+    background-color: #373E45;
+    color: white;
+    transition: all 0.3s ease;
+}
+.navLink.active{
+    background-color: #373E45;
+    color: white;
+}
+.navFooter{
+    width: 100%;
+    height: 8%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+.main{
+    height: 100%;
+    width: 85%;
+    background-color: #F0EDE9;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+.navHeader{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 6px;
+}
+.logo{
+    width: 40px;
+    height: 40px;
+    background-color: #E8A020;
+    border-radius: 2px;
+    margin-right: 10px;
+}
+.companyName{
+    color: white;
+    font-size: clamp(0.8rem, 2vw, 1.5rem);
+    font-weight: bold;
+
+}
+.profile{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    color: #f0f0f0;
+    font-size: clamp(0.4rem, 2vw, 1rem);
+        font-weight: 500;
+        width: 90%;
+        height: 100%;
+    }
+.avatar{
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: #E8A020;
+}

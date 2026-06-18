@@ -10,3 +10,28 @@ export async function fetchProducts(){
     const productsList = await response.json()
     return productsList;
 }
+export async function handleDeleteProduct(productId){
+    const response = await fetch(`http://localhost:3000/products/${productId}` , {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+        credentials: 'include',
+        
+    })
+}
+export async function addNewProduct(productName){
+    if(!productName.trim()){
+        console.log("გთხოვთ შეიყვანოთ პროდუქტი")
+        return
+    }
+    fetch(`http://localhost:3000/products/${productName}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+        credentials: 'include',
+    })
+}
