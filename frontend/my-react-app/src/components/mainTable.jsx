@@ -3,6 +3,7 @@ import { useState } from "react"
 import styles from '../styles/mainTable.module.css'
 import { FormComponent } from "../components/formComponent.jsx"
 
+
     const jsxContent = [
         {
             label: "START DATE",
@@ -15,12 +16,14 @@ import { FormComponent } from "../components/formComponent.jsx"
             tag: "select",
             type: "opType",
             dataName: "operation_type",
+            options: ['purchase' , 'placement' , 'extraPlacement' , 'provision' , 'takeFromVanue' , 'deinstall']
         },
         {
             label: "STATUS",
             tag: "select",
             type: null,
             dataName: "operation_status",
+            options: ['inProgress' , 'completed']
         },
         {
             label: "END DATE",
@@ -33,6 +36,7 @@ import { FormComponent } from "../components/formComponent.jsx"
             tag: "select",
             type: null,
             dataName: "productname",
+            options: ['products']
         },
         {
             label: "QTY",
@@ -41,10 +45,14 @@ import { FormComponent } from "../components/formComponent.jsx"
             dataName: "quantity"
         }
     ]
-export function MainTable({theadContent , data , tbodyContent }){
+export function MainTable({theadContent , data , tbodyContent , onDelete , onEdit}){
 
+    
 
     const [ wantEdit , setWantEdit ] = useState(false)
+    const hideForm = ()=>{
+        setWantEdit(false)
+    }
     const [ selectedOp , setSelectedOp ] = useState(null)
 const handleOpEdit = (op) =>{
     setWantEdit(true)
@@ -63,18 +71,24 @@ const handleOpEdit = (op) =>{
             </thead>
             <tbody>
                 {data.map((item , index) => (
-                    <tr key={index}>
+                    <tr key={item.operation_id}>
                         {tbodyContent.map((content , idx) => {
-                           return <td key={idx}>{item[content]}</td>
+                            if(content == 'start_date' || content == 'end_date' && item[content]){
+                                
+                                const dates = item[content].split('T')[0]
+                                return <td key={idx}>{dates}</td>
+                            }else{
+                                return <td key={idx}>{item[content]}</td>
+                            }
                         })}
-                        <td><SquarePen id={item.operation_id} onClick={() => handleOpEdit(item)}></SquarePen></td>
+                        <td><SquarePen className={styles.squarePen} onClick={() => handleOpEdit(item)}></SquarePen></td>
                         
-                        <td><Trash2></Trash2></td>
+                        <td><Trash2 className={styles.trash} onClick={() => onDelete(item.operation_id)}></Trash2></td>
                     </tr>
                 ))}
             </tbody>
         </table>
-        { wantEdit && <FormComponent jsxContent={jsxContent} operation={selectedOp}></FormComponent>}
+        { wantEdit && <FormComponent jsxContent={jsxContent} operation={selectedOp} onHide={hideForm} onEdit= { onEdit }></FormComponent>}
         </div>
     )
 }

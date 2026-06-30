@@ -48,3 +48,9 @@ table{
     border: 0;
     border: 1px solid #DEDEDE;
 }
+.trash{
+    color: red;
+}
+.squarePen{
+    color: blue;
+}

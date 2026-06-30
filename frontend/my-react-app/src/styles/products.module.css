@@ -1,0 +1,136 @@
+.productsSpace{
+    display: flex;
+    width: 100%;
+    height: 100%;
+
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    position: relative;
+}
+
+.productsHeader{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: left;
+
+    width: 500px;
+    height: 130px;
+
+    padding: 10px 0 0 10px;
+}
+.productsHeader>:first-child{
+    max-width: 80px;
+    padding: 5px 15px 5px 15px;
+    background-color: rgba(92,74,58,0.08);
+    border-radius: 12px;
+    font-size: small;
+    font-weight: 600;
+    color: #5C4A3A;
+}
+.productsHeader h4{
+    font-size: 24px;
+    padding: 0;
+    margin: 0;
+    margin-top: 15px;
+}
+.productsMain{
+    width: 500px;
+    height: 400px;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    margin-top: 10px;
+}
+.productInput{
+    width: 500px;
+    height: 45px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    background-color: white;
+    padding-right: 5px;
+}
+.plus{
+    padding: 5px;
+    color: gray;
+    background-color: #ededed;
+    border-radius: 8px;
+    cursor: pointer;
+}
+.productInput>input{
+    height: 100%;
+    width: 100%;
+    border: 0;
+    border-radius: 16px;
+    background: transparent;
+}
+.productInput>input:focus{
+    border: 0;
+    outline: none;
+}
+.productList{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background-color: white;
+    padding: 0 5px 5px 5px;
+    width: 97%;
+    height: 40px;
+    font-weight: 500;
+    border-radius: 9px;
+}
+.productList>.product{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    width: 30%;
+    height: 30px;
+}
+.product>span{
+    padding: 10px;
+    border-radius: 6px;
+    background-color: #E0E8ED;
+}
+.productTrash{
+    padding: 5px;
+    border-radius: 6px;
+    color: #5C4A3A;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+.productTrash:hover{
+    background-color: rgba(220,50,50,0.08);
+    color: #C0392B;
+}
+.numberOfProduct{
+    color: #8A7D72 ;
+    opacity: 0.8;
+    font-weight: 400;
+}
+.error{
+    position: absolute;
+    top: 50px;
+    right: 50px;
+    max-width: 340px;
+    min-width: 280px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    background-color: #FCEBEB;
+    border: 0.5px solid #F7C1C1;
+    font-size: 13px;
+    font-weight: 400;
+    color: #791F1F;
+}

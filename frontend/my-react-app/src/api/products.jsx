@@ -18,15 +18,16 @@ export async function handleDeleteProduct(productId){
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
         credentials: 'include',
-        
     })
+    const res = await response.json()
+    return res
 }
 export async function addNewProduct(productName){
     if(!productName.trim()){
         console.log("გთხოვთ შეიყვანოთ პროდუქტი")
-        return
+        return { message: 'please enter the product' }
     }
-    fetch(`http://localhost:3000/products/${productName}`, {
+    const res = await fetch(`http://localhost:3000/products/${productName}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -34,4 +35,5 @@ export async function addNewProduct(productName){
         },
         credentials: 'include',
     })
+    return res
 }

@@ -37,14 +37,33 @@ export async function addOp(formData){
     return response.status === 200
     
 }
-export async function editOp(opId){
-    const response = fetch('http://localhost:3000/operations/:opId', {
-        method: PUT,
+export async function editOp({ opId , formContent }){
+    const newData = formContent
+    console.log(newData)
+    
+    const response = fetch(`http://localhost:3000/operations/${opId}`, {
+        method: "PUT",
          headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(newData),
         credentials: 'include'
     })
+    const answer = await response
+    return answer
+    
+}
+export async function deleteOp(opId){
+    const response = await  fetch(`http://localhost:3000/operations/${opId}`, {
+        method: "DELETE",
+         headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+        credentials: 'include'
+    })
+    const answer = await response
+    console.log(answer)
+    return answer
 }

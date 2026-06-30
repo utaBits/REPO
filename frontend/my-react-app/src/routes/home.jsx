@@ -4,6 +4,7 @@ import { fetchOps , addOp } from "../api/operations.js" ;
 import { fetchProducts } from "../api/products.jsx"
 import { fetchDates } from "../api/dates.js";  
 import styles from "../styles/home.module.css" ;
+import { useQuery , useQueryClient , useMutation } from '@tanstack/react-query'
 
 
 
@@ -11,7 +12,7 @@ const typeStyles = [
     {id: 1 , label: "purchase"},
     {id: 2 , label: "placement"},
     {id: 3 , label: "extraPlacement"},
-    {id: 4 , label: "takeFromVenue"},
+    {id: 4 , label: "takeFromVanue"},
     {id: 5 , label: "deinstall"},
     {id: 6 , label: "provision"}
 ]
@@ -19,7 +20,7 @@ const statusStyles = [
     {id: 1 , label: "completed"},
     {id: 2 , label: "inProgress"}
 ]
-    const opTypes = [ 'purchase' , 'placement' , 'extraPlacement' , 'takeFromVenue' , 'deinstall' , 'provision']
+    const opTypes = [ 'purchase' , 'placement' , 'extraPlacement' , 'takeFromVanue' , 'deinstall' , 'provision']
     const opStatuses = [ 'completed' , 'inProgress' ]
 
 
@@ -27,23 +28,38 @@ const statusStyles = [
 
 
 function HomeComponent () {
-    const [ dates , setDates ] = useState([])
-    const [ products , setProducts ] = useState([])
-    const [ops , setOps] = useState([]);
 
+    const queryClient = useQueryClient()
+    
+    //const [ dates , setDates ] = useState([])
+    //const [ products , setProducts ] = useState([])
+    //const [ops , setOps] = useState([]);
 
-    useEffect(() => {
-        fetchDates().then(dates =>{
-            setDates(dates)
-        })
-        fetchOps().then(data => {
-            console.log(data , 'data from home.jsx') ;
-            setOps(data);
-        });
-        fetchProducts().then(data =>{
-            setProducts(data)
-        })
-    }, [])
+    
+    const { data: dates , datesLoading , startDatesError , datesError } = useQuery({
+       queryKey: [ 'dates' ],
+       queryFn: fetchDates,
+    })
+    
+    const { data: products , productsLoading , startProductsError , productsError } = useQuery({
+        queryKey: ['products'],
+        queryFn: fetchProducts,
+    })
+
+    const { data: ops , isLoading , isError , error } = useQuery({
+        queryKey: [ 'operations' ],
+        queryFn: fetchOps,
+    })
+
+    const operationsMutation = useMutation({
+        mutationFn: (formData) => addOp(formData),
+        onSuccess: () =>{
+            queryClient.invalidateQueries({
+                queryKey: [ 'operations' ]
+            })
+        }
+    })
+    
 
 //filterLabel
     const [filterOpen , setFilterOpen] = useState(null) ;
@@ -67,13 +83,7 @@ const [ selectFilter , setSelectedFilter] = useState({data: null , state: false}
 const filtersHandleClick = (index ) => {
     setSelectedFilter({data: index, state: !selectFilter.state})
 }
-    const filters = [
-        { id: 0 , label: 'START DATE', icon: <Calendar /> , content: dates.map((date , index) => <div className={styles.filterDates} key={index}><span></span><span>{date.start_date.toLocaleString().split("T")[0]}</span></div>)},
-        { id: 1 , label: 'OPERATION TYPE', icon: <Zap /> , content: opTypes.map((type , index) => <div className={styles.opTypes} key={index}><span></span><span>{type}</span></div>)},
-        { id: 2 , label: 'OPERATION STATUS', icon: <CircleCheckBig /> , content: opStatuses.map((status , index) => <div className={styles.opStatuses} key={index}><span></span><span>{status}</span></div>)},
-        { id: 3 , label: 'PRODUCT', icon: <Package /> , content: products.map((product , index) => <div  key={index} onClick={() => filtersHandleClick(index)} id={index} className={styles.productsDD}>{index === selectFilter.data && selectFilter.state ? <span className={styles.selected}><Check></Check></span> : <span></span>}<span>{product.productname}</span></div>)},
-        { id: 4 , label: 'QTY', icon: <WeightTilde /> , content: <input id="filterInput" type="number" placeholder="123..."></input>},
-    ]
+
 
 //to add endDate when status !== inProgress
 const  [ endDateInput , setEndDateInput ] = useState(false)
@@ -120,18 +130,26 @@ const handleSubmit = (e) =>{
         console.log(empty)
         return
     }
-    const succsess = addOp(formData).then(res => {
-        return res
-    })
-    if(succsess){
-       closeAddModal()
-       fetchOps().then(data => {
-            setOps(data);
-    })
-    }
+
+    operationsMutation.mutate(formData)
+    closeAddModal()
+
 }
+    if(isLoading){
+    return <h1>Loading operations...</h1>
+}
+   if(isError){
 
-
+    return <h1>error in operations: {error}</h1>
+    
+}
+const filters = [
+        { id: 0 , label: 'START DATE', icon: <Calendar /> , content: dates.map((date , index) => <div className={styles.filterDates} key={index}><span></span><span>{date.start_date.toLocaleString().split("T")[0]}</span></div>)},
+        { id: 1 , label: 'OPERATION TYPE', icon: <Zap /> , content: opTypes.map((type , index) => <div className={styles.opTypes} key={index}><span></span><span>{type}</span></div>)},
+        { id: 2 , label: 'OPERATION STATUS', icon: <CircleCheckBig /> , content: opStatuses.map((status , index) => <div className={styles.opStatuses} key={index}><span></span><span>{status}</span></div>)},
+        { id: 3 , label: 'PRODUCT', icon: <Package /> , content: products.map((product , index) => <div  key={index} onClick={() => filtersHandleClick(index)} id={index} className={styles.productsDD}>{index === selectFilter.data && selectFilter.state ? <span className={styles.selected}><Check></Check></span> : <span></span>}<span>{product.productname}</span></div>)},
+        { id: 4 , label: 'QTY', icon: <WeightTilde /> , content: <input id="filterInput" type="number" placeholder="123..."></input>},
+    ]
     return (
         <>
         <header className={styles.mainHeader}>
@@ -190,12 +208,13 @@ const handleSubmit = (e) =>{
                         </thead>
                         <tbody>
                             {ops.map((op , index ) =>{
-                                const style = typeStyles.find(type => type.label === op.operation_type);
+                               // const style = typeStyles.find(type => type.label === op.operation_type);
+                                //{console.log(style)}
                                 const statusStyle = statusStyles.find(status => status.label === op.operation_status);
                                 return (<tr id={op.operation_id} key={op.operation_id}>
                                     <td><span>{op.operation_id}</span></td>
                                     <td><span>{op.start_date ? op.start_date.toLocaleString().split("T")[0] : "Oops"}</span></td>
-                                    <td>{<span className={styles[style.label]}>{op.operation_type}</span>}</td>
+                                    <td>{<span className={styles[op.operation_type]}>{op.operation_type}</span>}</td>
                                     <td>{<span className={styles[statusStyle.label]}>{op.operation_status}</span>}</td>
                                     <td><span>{op.productname}</span></td>
                                     <td><span>{op.quantity}</span></td>

@@ -19,6 +19,34 @@ router.get('/all' , async (req,res) => {
         res.status(500).json({message: "Internal server error"});
     }
 })
+
+router.put('/:opId' , async (req,res)=>{
+    const { opId } = req.params
+    const newData = req.body
+    console.log(newData)
+    const data = Object.entries(newData)
+    const updateOp = `UPDATE operations SET ${data.map(([key , value])=> {return `${key} = '${value}'`})} WHERE operation_id = $1`
+    console.log(updateOp)
+    try{
+    const resp = await pool.query(updateOp,[opId])
+    res.status(200).send({ message: 'operation changed successfully' })
+    }catch(err){
+        res.status(500).send({ message: 'wtf is that?' })
+        console.log(err)
+    }
+})
+
+router.delete('/:opId' , async (req,res) =>{
+    const { opId } = req.params
+    try{
+        await pool.query("DELETE FROM operations WHERE operation_id = $1",[opId])
+        return res.status(204).send('operation delete successfully')
+    }catch(err){
+        console.log(err)
+        return res.status(500).json({ message: 'operation not found OR internal Server Error' })
+    }
+})
+
 router.post("/", async (req,res) => {
     const client = await pool.connect()
     console.log(req.body)
@@ -39,7 +67,7 @@ router.post("/", async (req,res) => {
            await client.query("UPDATE locally SET locally_quantity = locally_quantity + $1 WHERE product_id = $2" , [opQTY , productId])
            break
         case "deinstall":
-        case "takeFromVenue" :
+        case "takeFromVanue" :
             await client.query("UPDATE locally SET locally_quantity = locally_quantity + $1 WHERE product_id = $2" , [opQTY , productId])
             await client.query("UPDATE placemenets SET placed_quantity = placed_quantity - $1 WHERE product_id = $2", [opQTY , productId])
             break
