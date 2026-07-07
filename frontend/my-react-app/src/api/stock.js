@@ -1,6 +1,8 @@
+import { apiUrl } from '../config.js'
+
 export async function stockData(){
     try{
-       const response = await  fetch("http://localhost:3000/stock" , {
+       const response = await  fetch(`${apiUrl}/stock` , {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

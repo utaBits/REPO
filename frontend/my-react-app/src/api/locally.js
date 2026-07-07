@@ -1,6 +1,7 @@
+import { apiUrl } from '../config.js'
 export async function fetchLocallyData(){
     try{
-       const response = await  fetch("http://localhost:3000/locally" ,{
+       const response = await  fetch(`${apiUrl}/locally` ,{
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

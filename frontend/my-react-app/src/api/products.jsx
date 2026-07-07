@@ -1,5 +1,7 @@
+import { apiUrl } from '../config.js'
+
 export async function fetchProducts(){
-    const response = await fetch('http://localhost:3000/products', {
+    const response = await fetch(`${apiUrl}/products`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -10,7 +12,7 @@ export async function fetchProducts(){
     return productsList;
 }
 export async function handleDeleteProduct(productId){
-    const response = await fetch(`http://localhost:3000/products/${productId}` , {
+    const response = await fetch(`${apiUrl}/products/${productId}` , {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
@@ -25,7 +27,7 @@ export async function addNewProduct(productName){
         console.log("გთხოვთ შეიყვანოთ პროდუქტი")
         return { message: 'please enter the product' }
     }
-    const res = await fetch(`http://localhost:3000/products/${productName}`, {
+    const res = await fetch(`${apiUrl}/products/${productName}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

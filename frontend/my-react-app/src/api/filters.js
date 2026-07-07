@@ -1,8 +1,8 @@
-
+import { apiUrl } from '../config.js'
 export async function filtersData() {
     
     try {
-        const response = await fetch('http://localhost:3000/filters', {
+        const response = await fetch(`${apiUrl}/filters`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -18,7 +18,7 @@ export async function filtersData() {
 
 export async function filterByStatus(targetedFilter){
     try{
-        const res = await fetch(`http://localhost:3000/filter/${targetedFilter}`, {
+        const res = await fetch(`${apiUrl}/filter/${targetedFilter}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -41,7 +41,7 @@ export async function filterbyadaptive(data){
         return
     }
     try{
-        const response = await fetch(`http://localhost:3000/filterbyadaptive?${filterData}`,{
+        const response = await fetch(`${apiUrl}/filterbyadaptive?${filterData}`,{
         method: 'GET',
         headers: {
             'Content-type': 'Aplication/json'

@@ -1,7 +1,8 @@
 import { FileTypeCornerIcon } from "lucide-react";
+import  { apiUrl } from '../config.js'
 
 export async function fetchOps(){
-    const response = await fetch('http://localhost:3000/operations', {
+    const response = await fetch(`${apiUrl}/operations`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -13,7 +14,7 @@ export async function fetchOps(){
     return res;
 }
 export async function fetchAllOps(){
-    const response = await fetch('http://localhost:3000/operations/all', {
+    const response = await fetch(`${apiUrl}/operations/all`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -25,7 +26,7 @@ export async function fetchAllOps(){
     return data;
 }
 export async function addOp(formData){
-    const response = await fetch('http://localhost:3000/operations',{
+    const response = await fetch(`${apiUrl}/operations`,{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -41,7 +42,7 @@ export async function editOp({ opId , formContent }){
     const newData = formContent
     console.log(newData)
     
-    const response = fetch(`http://localhost:3000/operations/${opId}`, {
+    const response = fetch(`${apiUrl}/operations/${opId}`, {
         method: "PUT",
          headers: {
             'Content-Type': 'application/json',
@@ -54,7 +55,7 @@ export async function editOp({ opId , formContent }){
     
 }
 export async function deleteOp(opId){
-    const response = await  fetch(`http://localhost:3000/operations/${opId}`, {
+    const response = await  fetch(`${apiUrl}/operations/${opId}`, {
         method: "DELETE",
          headers: {
             'Content-Type': 'application/json',

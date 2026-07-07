@@ -1,5 +1,7 @@
+import {apiUrl} from '../config.js'
+
 export async function fetchAuth(username, password) {
-const response = await fetch('http://localhost:3000/auth/login', {
+const response = await fetch(`${apiUrl}/auth/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -12,7 +14,7 @@ const response = await fetch('http://localhost:3000/auth/login', {
             return data ;
     }
 export async function VerifyOTP(userOtp , username) {
-    const response = await fetch('http://localhost:3000/auth/verify-otp', {
+    const response = await fetch(`${apiUrl}/auth/verify-otp`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -27,7 +29,7 @@ export async function VerifyOTP(userOtp , username) {
 }
 
 export async function validateToken(){
-    const res = await fetch('http://localhost:3000/auth/token', {
+    const res = await fetch(`${apiUrl}/auth/token`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
