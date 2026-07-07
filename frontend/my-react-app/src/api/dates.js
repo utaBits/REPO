@@ -1,5 +1,6 @@
+import { apiUrl } from "../config.js";
 export async function fetchDates(){
-    const response = await fetch('http://localhost:3000/dates', {
+    const response = await fetch(`${apiUrl}/dates`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

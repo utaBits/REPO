@@ -5,4 +5,4 @@ import dotenv from "dotenv"
 
 dotenv.config()
 const port = process.env.PORT
-app.listen(port, /*"0.0.0.0",*/() => {console.log(`server running on port: ${port}`)})
+app.listen(port || 3000, /*"0.0.0.0",*/() => {console.log(`server running on port: ${port}`)})
