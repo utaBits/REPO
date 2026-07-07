@@ -11,15 +11,12 @@ import  cors  from 'cors'
 import datesRoutes from './routes/dates.routes.js'
 import stockRoutes from './routes/stock.routes.js'
 import locallyRoutes from './routes/locally.routes.js'
+import { verifyToken }from './middleware/auth.middleware.js'
 
 
 const root = path.resolve("..")
 
 const app = express()
-app.use(cors({
-  origin: 'http://localhost:5173',
-  credentials: true
-}))
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -32,14 +29,20 @@ const distPath = path.join(
 app.use(express.static(distPath));
 
 app.use(cookieParser())
-
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true
+}))
 
 
 app.use(express.static(path.join(root, "frontend")))
 
 app.use(express.json())
 app.use(express.static("../public"))
+
+
 app.use("/auth", authRoutes)
+app.use(verifyToken)
 app.use("/operations", oprouter)
 app.use("/filter", filterNameRouter )
 app.use("/filterbyadaptive", filterNameRouter)

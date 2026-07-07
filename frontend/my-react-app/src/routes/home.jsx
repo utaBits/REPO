@@ -5,6 +5,8 @@ import { fetchProducts } from "../api/products.jsx"
 import { fetchDates } from "../api/dates.js";  
 import styles from "../styles/home.module.css" ;
 import { useQuery , useQueryClient , useMutation } from '@tanstack/react-query'
+import { data } from "react-router-dom";
+import { filterbyadaptive } from "../api/filters.js";
 
 
 
@@ -61,6 +63,12 @@ function HomeComponent () {
     })
     
 
+    const [ filteredOps , setFilteredOps ] = useState([])
+    useEffect(() =>{
+        if(ops){
+            setFilteredOps(ops)
+        }
+    },[ops])
 //filterLabel
     const [filterOpen , setFilterOpen] = useState(null) ;
     const toggleFilter = (index) =>{
@@ -79,16 +87,31 @@ function HomeComponent () {
    const AddOpModal = () => {setOpModal(true)}
 
    //select filter
-const [ selectFilter , setSelectedFilter] = useState({data: null , state: false})
-const filtersHandleClick = (index ) => {
-    setSelectedFilter({data: index, state: !selectFilter.state})
+const [ selectFilter , setSelectedFilter] = useState({})
+const filtersHandleClick = (key , val)  => {
+    setSelectedFilter(
+        prev => ({
+            ...prev,
+          [key]: val,
+        })
+    )
 }
+    console.log(selectFilter , "selectedFIlter")
+    if(Object.keys(selectFilter).length > 0){
+        console.log('gavushveb')
+    }else{
+        console.log('carielia')
+    }
 
-
+    filterbyadaptive(selectFilter)
 //to add endDate when status !== inProgress
 const  [ endDateInput , setEndDateInput ] = useState(false)
 const addEndDateInput = (e) =>{
     setEndDateInput(e.target.value !== 'inProgress')
+}
+//cleare
+const handleClear = () =>{
+    setSelectedFilter({})
 }
 
 //emptyForm
@@ -135,19 +158,20 @@ const handleSubmit = (e) =>{
     closeAddModal()
 
 }
+
     if(isLoading){
     return <h1>Loading operations...</h1>
 }
    if(isError){
-
-    return <h1>error in operations: {error}</h1>
+    {console.log(error)}
+    return <h1>error in operations: see error in console</h1>
     
 }
 const filters = [
-        { id: 0 , label: 'START DATE', icon: <Calendar /> , content: dates.map((date , index) => <div className={styles.filterDates} key={index}><span></span><span>{date.start_date.toLocaleString().split("T")[0]}</span></div>)},
-        { id: 1 , label: 'OPERATION TYPE', icon: <Zap /> , content: opTypes.map((type , index) => <div className={styles.opTypes} key={index}><span></span><span>{type}</span></div>)},
-        { id: 2 , label: 'OPERATION STATUS', icon: <CircleCheckBig /> , content: opStatuses.map((status , index) => <div className={styles.opStatuses} key={index}><span></span><span>{status}</span></div>)},
-        { id: 3 , label: 'PRODUCT', icon: <Package /> , content: products.map((product , index) => <div  key={index} onClick={() => filtersHandleClick(index)} id={index} className={styles.productsDD}>{index === selectFilter.data && selectFilter.state ? <span className={styles.selected}><Check></Check></span> : <span></span>}<span>{product.productname}</span></div>)},
+        { id: 0 , label: 'START DATE', icon: <Calendar /> , content: dates.map((date , index) => <div className={styles.filterDates} key={index} onClick={() => filtersHandleClick('start_date' , date.start_date)}>{selectFilter.start_date == date.start_date ? <span className={styles.selected}><Check></Check></span> : <span></span>}<span>{date.start_date.toLocaleString().split("T")[0]}</span></div>)},
+        { id: 1 , label: 'OPERATION TYPE', icon: <Zap /> , content: opTypes.map((type , index) => <div className={styles.opTypes} key={index} onClick={() => filtersHandleClick('operation_type' , type)}>{selectFilter.operation_type == type ? <span className={styles.selected}><Check></Check></span> : <span></span>}<span>{type}</span></div>)},
+        { id: 2 , label: 'OPERATION STATUS', icon: <CircleCheckBig /> , content: opStatuses.map((status , index) => <div className={styles.opStatuses} key={index} onClick={() => filtersHandleClick('operation_status' , status)}>{selectFilter.operation_status == status ? <span className={styles.selected}><Check></Check></span> : <span></span>}<span>{status}</span></div>)},
+        { id: 3 , label: 'PRODUCT', icon: <Package /> , content: products?.map((product , index) => <div  key={index} onClick={() => filtersHandleClick('product_id' , product.id)} id={index} className={styles.productsDD}>{selectFilter.product_id == product.id ? <span className={styles.selected}><Check></Check></span> : <span></span>}<span>{product.productname}</span></div>)},
         { id: 4 , label: 'QTY', icon: <WeightTilde /> , content: <input id="filterInput" type="number" placeholder="123..."></input>},
     ]
     return (
@@ -189,6 +213,7 @@ const filters = [
                         })
 
                     }
+                    { Object.keys(selectFilter).length > 0 ? <button className={styles.clearBtn} onClick={() => handleClear()}>Clear</button> :  null}
                 </div>
                 <div className={styles.opTable}>
                     <div>
@@ -207,7 +232,8 @@ const filters = [
                             </tr>
                         </thead>
                         <tbody>
-                            {ops.map((op , index ) =>{
+                            {console.log(filteredOps)}
+                            {filteredOps?.map((op , index ) =>{
                                // const style = typeStyles.find(type => type.label === op.operation_type);
                                 //{console.log(style)}
                                 const statusStyle = statusStyles.find(status => status.label === op.operation_status);

@@ -5,18 +5,18 @@ export async function fetchOps(){
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
         credentials: 'include',
     });
-    return response.json();
+    const res = await response.json()
+    console.log(res)
+    return res;
 }
 export async function fetchAllOps(){
     const response = await fetch('http://localhost:3000/operations/all', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
         credentials: 'include',
     });
@@ -29,7 +29,6 @@ export async function addOp(formData){
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
         body: JSON.stringify(formData),
         credentials: 'include'
@@ -38,6 +37,7 @@ export async function addOp(formData){
     
 }
 export async function editOp({ opId , formContent }){
+    console.log('gamomidzaxes')
     const newData = formContent
     console.log(newData)
     
@@ -45,7 +45,6 @@ export async function editOp({ opId , formContent }){
         method: "PUT",
          headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
         body: JSON.stringify(newData),
         credentials: 'include'
@@ -59,7 +58,6 @@ export async function deleteOp(opId){
         method: "DELETE",
          headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
         credentials: 'include'
     })

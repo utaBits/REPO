@@ -17,15 +17,15 @@ function Login(){
         }
         if (!OTPInput) {
         const data = await fetchAuth(username, password)
+        console.log(data.success , 'if possible')
         data.success ? setOTPInput(true) : alert(`Login failed: ${data.message}`);
         console.log(data , 'data from login.jsx') ;
     }     else {
         const userOtp = OTPInput ;
         const data = await VerifyOTP(userOtp , username) ;
         if(data.success){
+            localStorage.setItem('username', username);
             navigate('/dashboard') ;
-            localStorage.setItem('username' , username) ; 
-
         } else {
             alert(`OTP verification failed: ${data.message}`);
         }
@@ -38,7 +38,7 @@ function Login(){
     return(
         <div className={styles.loginContainer}>
             <h2>Login</h2>
-            <form className={styles.loginForm} onSubmit={handleSubmit}>
+            <form className={styles.loginForm} onSubmit={(e) => handleSubmit(e)}>
                 <div>
                     <label htmlFor="username">Username:</label>
                     <input

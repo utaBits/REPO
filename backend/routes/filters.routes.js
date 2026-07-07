@@ -9,25 +9,24 @@ router.get("/:filterName", async (req,res) => {
         const filterResult = await pool.query(`SELECT DISTINCT ${filterName} FROM Operations JOIN Products ON Operations.product_id = Products.id`)
         res.status(200).json(filterResult.rows)
     }else{
-        const filterResult = await pool.query(`SELECT DISTINCT ${filterName}::text FROM Operations`);
+        const filterResult = await pool.query(`SELECT * FROM operations WHERE operation_status = $1`,[filterName]);
         res.status(200).json(filterResult.rows);
     }
 })
 
 router.get("/", async (req,res) => {
-    const map = {
-        productname: "products.productname",
-        operation_type: "operations.operation_type",
-        start_date: "operations.start_date",
-        operation_status: "operations.operation_status",
-        quantity: "operations.quantity"
+    console.log(req.query , 'fromfromfrom')
+    const data = req.query
+    const datta = Object.entries(data)
+    console.log(datta , 'datttttta')
+    const query = datta.map(([key , value]) => {return `${key} = '${value}'`})
+    console.log(query)
+    try{
+    const filteredData = await pool.query('SELECT * FROM operations WHERE  ')
+    }catch(err){
+        console.log(err , 'while select data from db')
+        res.status(500).json({ message: 'something was wrong when select filters from DB' })
     }
-    const fiters = Object.keys(req.query);
-    const values = Object.values(req.query);
-    
-    const filterResult = await pool.query(`SELECT products.productname , operations.operation_type , operations.start_date , operations.operation_status , operations.quantity FROM Operations JOIN Products ON Operations.product_id = Products.id WHERE ${fiters.map((filter, index) => `${map[filter]} = $${index + 1}`).join(" AND ")}`, values);
-    res.status(200).json(filterResult.rows);
-    console.log(req.query , " is the query");
 })
 
 

@@ -5,9 +5,9 @@ dotenv.config()
 
 const pool = new pg.Pool({
     user: 'postgres',
-    host: 'localhost',
+    host: process.env.DB_HOST || 'localhost',
     database: 'Inventory',
-    port: 5432,
+    port: process.env.DB_PORT || 5432,
     password: process.env.DB_PASSWORD,
 })
 

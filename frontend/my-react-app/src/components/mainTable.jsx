@@ -1,7 +1,9 @@
 import { Trash2 ,SquarePen } from "lucide-react"
-import { useState } from "react"
+import { use, useState } from "react"
 import styles from '../styles/mainTable.module.css'
 import { FormComponent } from "../components/formComponent.jsx"
+import { filterByStatus } from "../api/filters.js"
+import { useEffect } from "react"
 
 
     const jsxContent = [
@@ -36,7 +38,7 @@ import { FormComponent } from "../components/formComponent.jsx"
             tag: "select",
             type: null,
             dataName: "productname",
-            options: ['products']
+            options: null
         },
         {
             label: "QTY",
@@ -59,8 +61,39 @@ const handleOpEdit = (op) =>{
     setSelectedOp(op)
 }
 
+const [ filter , setFilter ] = useState('ALL')
+const [ tableContent , setTableContent ] = useState(data)
+const handleFilter = async (status , e) =>{
+    if(status == 'all'){
+        setTableContent(data)
+    }else{
+    const filteredData = await filterByStatus(status)
+    setTableContent(filteredData)
+    }
+    setFilter(e.target.textContent)
+
+}
+useEffect(() =>{
+    setTableContent(data)
+    setFilter('ALL')
+},[data])
+
     return (
         <div className={styles.mainContent}>
+            <div className={styles.mainTableHeader}>
+                <div className={styles.mainTableHeaderTop}>
+                    <span>OPS</span>
+                    <div>
+                        <h3>Operations Manifest</h3>
+                        <span>warehouse & product movement log</span>
+                    </div>
+                </div>
+                <div className={styles.mainTableHeaderBottom}>
+                    <span className={filter == 'ALL' && styles.active} onClick={(e) => handleFilter('all' , e)}>ALL</span>
+                    <span className={filter == 'IN PROGRESS' && styles.active} onClick={(e) => handleFilter('inProgress' , e)}>IN PROGRESS</span>
+                    <span className={filter == 'COMPLETED' && styles.active} onClick={(e) => handleFilter('completed' , e)}>COMPLETED</span>
+                </div> 
+            </div>
         <table>
             <thead className={styles.mainTableThead}>
                 <tr>
@@ -70,15 +103,14 @@ const handleOpEdit = (op) =>{
             </tr>
             </thead>
             <tbody>
-                {data.map((item , index) => (
+                {tableContent?.map((item , index) => (
                     <tr key={item.operation_id}>
                         {tbodyContent.map((content , idx) => {
                             if(content == 'start_date' || content == 'end_date' && item[content]){
-                                
                                 const dates = item[content].split('T')[0]
                                 return <td key={idx}>{dates}</td>
                             }else{
-                                return <td key={idx}>{item[content]}</td>
+                                return <td className={styles[item[content]]} key={idx}>{item[content]}</td>
                             }
                         })}
                         <td><SquarePen className={styles.squarePen} onClick={() => handleOpEdit(item)}></SquarePen></td>

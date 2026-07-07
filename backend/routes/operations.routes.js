@@ -25,6 +25,7 @@ router.put('/:opId' , async (req,res)=>{
     const newData = req.body
     console.log(newData)
     const data = Object.entries(newData)
+
     const updateOp = `UPDATE operations SET ${data.map(([key , value])=> {return `${key} = '${value}'`})} WHERE operation_id = $1`
     console.log(updateOp)
     try{
@@ -37,13 +38,42 @@ router.put('/:opId' , async (req,res)=>{
 })
 
 router.delete('/:opId' , async (req,res) =>{
+    const client = await pool.connect()
     const { opId } = req.params
     try{
+        const data = await client.query('SELECT operation_type , quantity , product_id FROM operations WHERE operation_id = $1',[opId])
+        console.log(data.rows , 'dabndjnn')
+        const deletedOpData = data.rows[0]
+
+        await client.query("BEGIN")
+        switch(deletedOpData.operation_type){
+            case 'takeFromVanue' :
+                case 'deinstall':
+                await client.query('UPDATE locally SET locally_quantity = locally_quantity - $1 WHERE product_id = $2',[deletedOpData.quantity , deletedOpData.product_id])
+                await client.query('UPDATE placemenets SET placed_quantity = placed_quantity + $1 WHERE product_id = $2',[deletedOpData.quantity , deletedOpData.product_id])
+                break
+            case 'provision':
+                await client.query('UPDATE stock SET stock_quantity = stock_quantity + $1 WHERE product_id = $2',[deletedOpData.quantity , deletedOpData.product_id])
+                await client.query("UPDATE locally SET locally_quantity = locally_quantity - $1 WHERE product_id = $2" , [deletedOpData.quantity , deletedOpData.product_id])
+                break
+            case 'extraPlacement':
+                case 'placement':
+                    await client.query("UPDATE placemenets SET placed_quantity = placed_quantity - $1 WHERE product_id = $2",[deletedOpData.quantity , deletedOpData.product_id])
+                    await client.query("UPDATE locally SET locally_quantity = locally_quantity + $1 WHERE product_id = $2",[deletedOpData.quantity , deletedOpData.product_id])
+                    break
+            case 'purchase':
+                await client.query('UPDATE locally SET locally_quantity = locally_quantity - $1 WHERE product_id = $2',[deletedOpData.quantity, deletedOpData.product_id])
+                break
+        }
+        await client.query('COMMIT')
         await pool.query("DELETE FROM operations WHERE operation_id = $1",[opId])
         return res.status(204).send('operation delete successfully')
     }catch(err){
+        await client.query("ROLLBACK")
         console.log(err)
         return res.status(500).json({ message: 'operation not found OR internal Server Error' })
+    }finally{
+        client.release()
     }
 })
 

@@ -4,16 +4,26 @@
     overflow-y: scroll;
     scrollbar-width: none;
     position: relative;
+    background-color: #FFFFFF;
 }
 table{
     width: 100%;
     border-collapse: separate;
     font-family: Arial, sans-serif;
-    text-align: left;
     margin: 20px 0;
+    border-spacing: 20px 20px;
 }
 .mainTableThead{
-    height: 50px;
+    height: 30px;
+    color: #AAAAAA;
+    background-color: #FFFFFF;
+    font-size: clamp(0.3rem , 2vw , 0.8rem);
+    border-bottom: 1px solid #F0F0F0;
+    text-align: center;
+}
+.mainTableThead>tr>*{
+    padding: 0;
+    margin: 0;
 }
 .editModal{
     position: fixed;
@@ -48,9 +58,154 @@ table{
     border: 0;
     border: 1px solid #DEDEDE;
 }
-.trash{
-    color: red;
-}
 .squarePen{
-    color: blue;
+    width: 20px;
+    height: 20px;
+    color: #544AB7;
+}
+.error{
+    position: absolute;
+    bottom: 20px;
+    right: 50px;
+    max-width: 340px;
+    min-width: 280px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    background-color: #FCEBEB;
+    border: 0.5px solid #F7C1C1;
+    font-size: 13px;
+    font-weight: 400;
+    color: #791F1F;
+}
+.purchase{
+    color: #544AB7;
+    background-color: #EEF0FF;
+}
+.deinstall{
+    color: #A11F21;
+    background-color: #FFF1F0;
+}
+.extraPlacement{
+    background-color: #E8F8FF;
+    color: #1270A0;
+}
+.placement{
+    background-color: #FAF0FF;
+    color: #7B3FA0;
+}
+.takeFromVanue{
+    background-color: #FFF4E5;
+    color: #A06209;
+}
+.completed{
+    background-color: #E8F8F0;
+    color: #12704A;
+}
+.inProgress{
+    background-color: #FAEEDA;
+    color: #854F0C;
+}
+.canceled{
+    background-color: #F1EFE8;
+    color: #605E5A;
+}
+.provision{
+    background-color: #E0F5EE ;
+    color: #0D6E56;
+}
+
+tbody tr{
+    height: 30px;
+    border-bottom: 1px solid #F0F0F0;
+}
+tbody td{
+    font-size: clamp(0.3rem , 2vw , 0.8rem);
+    font-weight: bold;
+    border-radius: 6px;
+    text-align: center;
+}
+.trash{
+    color: #C0392A;
+    width: 20px;
+    height: 20px;
+}
+.mainTableHeader{
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    flex-direction: column;
+
+    width: 100%;
+    height: 200px;
+    margin-left: 10px;
+    margin-top: 10px;
+
+}
+.mainTableHeaderTop h3{
+    font-size: 20px;
+    font-weight: 700;
+    padding: 0;
+    margin: 0;
+}
+.mainTableHeaderTop>span{
+    padding: 10px;
+    background-color: #E4E0DB;
+    color: #544AB7;
+    font-weight: 700;
+    font-size: 16px;
+    border-radius: 6px;
+}
+.mainTableHeaderTop>div{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 3px;
+}
+.mainTableHeaderTop>div>span{
+    font-size: 16px;
+    color: #4B5564;
+    opacity: 0.5;
+}
+.mainTableHeaderTop{
+    display: flex; 
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+    height: 40%;
+    gap: 15px;
+    border-bottom: 2px solid #F0F0F0;
+}
+.mainTableHeaderBottom{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: row;
+    width: 30%;
+    height: 40%;
+    gap: 7px;
+
+}
+.mainTableHeaderBottom>*{
+    padding: 7px 12px 7px 2px;
+    font-size: 12px;  
+    background-color: white;
+    border-radius: 6px;
+    border: 1px solid #AAAAAA;
+    font-weight: 600;
+    text-align: center;
+    color: #AAAAAA;
+    cursor: pointer;
+    width: 80px;
+
+}
+.mainTableHeaderBottom>*:not(.active):hover{
+    border: 1px solid #1E2A44;
+    color: #1E2A44;
+}
+.mainTableHeaderBottom .active{
+    background-color: #1E2A44;
+
+    color: white;
 }

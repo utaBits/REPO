@@ -117,7 +117,7 @@ header.mainHeader{
     width: 15px;
     height: 15px;
 }
-.filters  button{
+.filters button:not(.clearBtn){
     border: none;
     outline: none;
     background-color: #FFFFFF;
@@ -132,6 +132,18 @@ header.mainHeader{
     justify-content: space-between;
     font-size: clamp(0.4rem, 2vw, 0.8rem);
     color: #999999;
+
+}
+.filters .clearBtn{
+    border: none;
+    outline: none;
+    padding: 0;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100px;
+    height: 30px;
+    background-color: #1270A0;
+    color: #E8F8FF;
 
 }
 .filters  button svg{
@@ -174,19 +186,24 @@ header.mainHeader{
 .dropDown div:hover{
     background-color: #F9F9F9;
 }
-.dropDown div>:first-child:not(.selected){
-    padding: 10px;
+.dropDown div>:first-child{
+    width: 20px;
+    height: 20px;
     border-radius: 8px;
     background-color: #FFFFFF;
     border: 2px solid #DDDDDD;
-}
-.dropDown div>:first-child.selected{
+
     display: flex;
     align-items: center;
-    padding: 3px;
-    border-radius: 8px;
-    border: 2px solid #DDDDDD;
-    background-color: #1D9E74;
+    justify-content: center;
+
+}
+.dropDown div>:first-child.selected>*{
+    background-color: #E8F8F1;
+    Color: #12704A;
+    width: 100%;
+    height: 100%;
+    border-radius: 6px;
 }
 .dropDown div>:last-child{
     font-size: clamp(1rem , 2px, 1.5rem);

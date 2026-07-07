@@ -1,8 +1,15 @@
+import { use } from 'react'
 import styles from '../styles/mainTable.module.css'
-import { useState } from 'react'
+import { useState , useEffect } from 'react'
+import { fetchProducts } from '../api/products.jsx'
+import { ErrorComp }from '../utills/helpers.jsx'
+
+
+
 export function FormComponent({ jsxContent , operation , onHide , onEdit}){
 
-    const [ formContent , setFormContent ] = useState({})
+    const [ formContent , setFormContent ] = useState(null)
+    const [ emptyFormContent , setEmptyFormContent ] = useState(false)
     const handleChange = (e) =>{
         e.preventDefault()
         const { name , value } = e.target
@@ -15,6 +22,11 @@ export function FormComponent({ jsxContent , operation , onHide , onEdit}){
 async function handleOpEdit(e){
     e.preventDefault()
     const opId = operation.operation_id
+    if(!formContent){
+        setEmptyFormContent(true)
+        setTimeout(() => {setEmptyFormContent(false)} , 3000)
+        return
+    }
     const response = await onEdit({ opId , formContent })
     console.log(response)
     if(response.status == '200'){
@@ -29,15 +41,17 @@ async function handleOpEdit(e){
               { item.tag == "input" ? < item.tag onChange={(e) => handleChange(e)} name={item.dataName} type={item.type} /*value={operation[item.dataName]}*//>
                : 
                < item.tag onChange={(e) => handleChange(e)} name={item.dataName} defaultValue={operation[item.dataName]} >
+                {item.dataName == 'productname' &&  null}
                 <option className={styles.defaultValue}>
                     {operation[item.dataName]}
                 </option>
-                {item.options.map((option , idx) =>{return <option key={idx}>{option}</option>}) }
+                {item.options?.map((option , idx) =>{return <option key={idx}>{option}</option>}) }
                 </ item.tag > }
             </label>
         })
         }
         <button type='submit'>SAVE</button>
+        { emptyFormContent && <ErrorComp classN={styles.error} errorText="cant to save unchanged operation" /> }
     </form>
 )
 }

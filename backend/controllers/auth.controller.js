@@ -6,6 +6,7 @@ import  jwt from "jsonwebtoken"
 
 export const login = async (req ,res) =>{
      const { username , password } = req.body
+     console.log(username , password , 'is creds')
      try{
      const result = await pool.query(
         "SELECT * FROM users WHERE username = $1", [username]
@@ -29,6 +30,27 @@ export const login = async (req ,res) =>{
         console.log(userGmail)
           await sendMail(userGmail)
 
+    
+    res.status(200).json({ success: true , message: "Login success",  username: user.username })
+}catch(err){console.error(err)
+    res.status(500).json({ success: false , message: "Internal server error" })
+}
+}
+
+export const otpValidate = async (req , res) =>{
+    const { userOtp } = req.body
+    console.log(userOtp)
+
+    const username = req.headers.username
+    console.log(username , "from otp validate")
+    const response = await pool.query("SELECT * FROM users WHERE username = $1",[username])
+    console.log(response , "DBBBBB") ;
+    const user = response.rows[0]
+    const otp = user.otp
+    console.log(otp , 'otp from db')
+    if(userOtp !== otp){
+        return res.status(400).json({success: false , message: "Invalid OTP"})
+    }
     const token = jwt.sign(
         {
             userId: user.id,
@@ -40,30 +62,10 @@ export const login = async (req ,res) =>{
     res.cookie("token", token, {
   httpOnly: true,
   secure: false,
-  sameSite: "Lax"
+  sameSite: "lax",
 });
     
 
     console.log(token)
-    res.status(200).json({ success: true , message: "Login success", token , username: user.username })
-}catch(err){console.error(err)}
-
-}
-
-export const otpValidate = async (req , res) =>{
-    const { userOtp } = req.body
-    console.log(userOtp)
-
-    const token = req.cookies.token
-
-    const username = req.headers.username
-    console.log(username , "from otp validate")
-    const response = await pool.query("SELECT otp FROM users WHERE username = $1",[username])
-    console.log(response , "DBBBBB") ;
-    const otp = response.rows[0].otp
-    console.log(otp , 'otp from db')
-    if(userOtp !== otp){
-        return res.status(401).json({success: false , message: "wrong OTP" })
-    }
     res.status(200).json({success: true , message: "login successfull" })
 }

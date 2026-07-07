@@ -3,7 +3,6 @@ export async function fetchProducts(){
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
         credentials: 'include',
     });
@@ -15,7 +14,6 @@ export async function handleDeleteProduct(productId){
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
         credentials: 'include',
     })
@@ -31,7 +29,6 @@ export async function addNewProduct(productName){
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
         credentials: 'include',
     })
