@@ -209,3 +209,11 @@ tbody td{
 
     color: white;
 }
+.optionalBtns{
+    display: flex;
+    flex-direction: row;
+    justify-self: flex-start;
+    align-items: center;
+    width: 50%;
+    height: auto;
+}

@@ -52,8 +52,10 @@ const handleClose = () =>{
             </label>
         })
         }
-        <button type='submit'>SAVE</button>
-        <button onClick={() => handleClose()}>close Temo</button>
+        <div className={styles.optionalBtns}>
+          <button type='submit'>SAVE</button>
+          <button onClick={() => handleClose()}>close</button>
+        </div>
         { emptyFormContent && <ErrorComp classN={styles.error} errorText="cant to save unchanged operation" /> }
     </form>
 )
