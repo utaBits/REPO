@@ -6,7 +6,7 @@ import { ErrorComp }from '../utills/helpers.jsx'
 
 
 
-export function FormComponent({ jsxContent , operation , onHide , onEdit}){
+export function FormComponent({ jsxContent , operation , onHide , onEdit , onClose}){
 
     const [ formContent , setFormContent ] = useState(null)
     const [ emptyFormContent , setEmptyFormContent ] = useState(false)
@@ -33,7 +33,9 @@ async function handleOpEdit(e){
         onHide()
     }
 }
-
+const handleClose = () =>{
+    onClose()
+}
     return(
     <form onSubmit={(e) => handleOpEdit(e)} className={styles.editModal}>
         { jsxContent.map((item , idx) => {
@@ -51,6 +53,7 @@ async function handleOpEdit(e){
         })
         }
         <button type='submit'>SAVE</button>
+        <button onClick={() => handleClose()}>close Temo</button>
         { emptyFormContent && <ErrorComp classN={styles.error} errorText="cant to save unchanged operation" /> }
     </form>
 )

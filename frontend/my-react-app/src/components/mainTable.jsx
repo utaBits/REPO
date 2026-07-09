@@ -78,6 +78,9 @@ useEffect(() =>{
     setFilter('ALL')
 },[data])
 
+const onClose = () =>{
+    setWantEdit(false)
+}
     return (
         <div className={styles.mainContent}>
             <div className={styles.mainTableHeader}>
@@ -120,7 +123,7 @@ useEffect(() =>{
                 ))}
             </tbody>
         </table>
-        { wantEdit && <FormComponent jsxContent={jsxContent} operation={selectedOp} onHide={hideForm} onEdit= { onEdit }></FormComponent>}
+        { wantEdit && <FormComponent jsxContent={jsxContent} operation={selectedOp} onHide={hideForm} onEdit= { onEdit } onClose={ onClose }></FormComponent>}
         </div>
     )
 }
