@@ -27,7 +27,7 @@ try{
 export async function sendMail(userGmail) {
 
     const randomNumber = Math.floor(100000 + Math.random() * 900000)
-
+    console.log(randomNumber)
     await pool.query("UPDATE users SET otp = $1 WHERE gmail = $2",[randomNumber , userGmail])
 
     try{
