@@ -15,6 +15,10 @@ const transporter = mailer.createTransport({
        pass: process.env.GPASS
     },
     family: 4,
+    connectionTimeout: 10000,
+    greetingTimeout: 5000,
+    socketTimeout: 30000,
+    dnsTimeout: 5000
 })
 
 try{
