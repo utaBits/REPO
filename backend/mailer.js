@@ -11,7 +11,7 @@ dotenv.config()
 //transporter is sender , wich we can create or give to function , already in use
 const transporter = mailer.createTransport({
     host: "smtp.gmail.com",
-    port: 587,
+    port: 465,
     secure: false,
     auth:{
        user: process.env.GMAIL,
