@@ -97,7 +97,7 @@ const onClose = () =>{
                     <span className={filter == 'COMPLETED' && styles.active} onClick={(e) => handleFilter('completed' , e)}>COMPLETED</span>
                 </div> 
             </div>
-            {tableContent ?? <h5>there is no such data</h5>}
+            {tableContent?.length === 0 && <h5>there is no such data</h5>}
         <table>
             <thead className={styles.mainTableThead}>
                 <tr>
