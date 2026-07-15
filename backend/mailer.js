@@ -1,6 +1,9 @@
 import mailer from "nodemailer"
 import dotenv from "dotenv"
 import { pool } from "./config/db.js"
+import dns from 'dns'
+
+dns.setDefaultResultOrder('ipv4first')
 
 
 dotenv.config()
